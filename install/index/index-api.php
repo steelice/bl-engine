@@ -10,6 +10,8 @@ define('IS_JSON_MODE', true);
 /** Инклудим движок **/
 include_once ENGINE_PATH.'/init.php';
 
+
+
 $module = null;
 
 
@@ -62,6 +64,11 @@ try{
 
 	$_APP = rMyApp::getInstance();
 	$_APP->loadComponents();
+	if(!empty($_REQUEST['api_token']))
+	{
+		$_APP->user->setDeviceID('API');
+		$_APP->user->authByToken($_REQUEST['api_token']);
+	}
 	$_APP->user->authed();
 
 	

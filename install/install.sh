@@ -68,7 +68,9 @@ if [ "${NEED2CREATE}" == "" ] || [ ${NEED2CREATE} == 'y' ] || [ ${NEED2CREATE} =
 	rm -Rf ${ROOT_DIR}/site/*/.svn
 fi
 
-
+cd ${ENGINE_DIR}
+curl -sS https://getcomposer.org/installer | php
+php composer.phar require filp/whoops
 
 
 echo "Done."

@@ -88,7 +88,13 @@ catch(rNotFound $e){
 	$_APP->notFound();
 
 	
-}/* catch(SmartyException $e){
+}catch(rInvalidFormData $e)
+{
+	$_APP->assignSession('_INVALID_POST', $_POST);
+	$_APP->reload($e->getMessage(), APPMSG_ERROR);
+}
+
+/* catch(SmartyException $e){
 	rSiteNotifier::outputError($e->getMessage(), '', TEMPLATES_PATH.'/errors/notice.tpl', 'E_TPL_ERROR');
 	//exit;
 } */
