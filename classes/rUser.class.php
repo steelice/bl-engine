@@ -854,6 +854,52 @@ class rUser{
 	{
 		return md5($this->email.$this->id.$this->salt.$this->datereg);
 	}
+
+	/**
+	 * Возвращает настройки рассылок для пользователя
+	 * @return array массив с настройками
+	 */
+	public function getEmailSettings()
+	{
+		$arr = @json_decode($this->email_settings, true);
+		if(!$arr) return [];
+
+		return $arr;
+	}
+
+	/**
+	 * Установка настроек рассылок
+	 * @param array $settings массив настроек
+	 */
+	public function setEmailSettings(array $settings)
+	{
+		$this->setField('email_settings', json_encode($settings));
+	}
+
+	/**
+	 * Возвращает настройку рассылок по его ключу
+	 * @param  string $key     ключ
+	 * @param  mixed $default значение по умолчанию
+	 * @return mixed          значение
+	 */
+	public function getEmailSetting($key, $default = NULL)
+	{
+		$setts = $this->getEmailSettings();
+		if(!isset($setts[$key])) return $default;
+		return $setts[$key];
+	}
+
+	/**
+	 * Устанавливает настройку рассылок по ключу
+	 * @param string $key  ключ
+	 * @param mixed $data данные
+	 */
+	public function setEmailSetting($key, $data)
+	{
+		$setts = $this->getEmailSettings();
+		$setts[$key] = $data;
+		$this->setEmailSettings($setts);
+	}
  
 }
 
