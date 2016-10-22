@@ -14,7 +14,7 @@ class module_register extends rMyModule{
 		$s = new rSocNetworkTable($this->app->db);
 		$this->assign('social_networks', $s->getList());
 
-		$this->app->addJS('register.js');
+		$this->app->addJS('js/register.js');
 		$this->app->setTemplate('register.tpl');
 	}
 
