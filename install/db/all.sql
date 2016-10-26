@@ -6,68 +6,9 @@ CREATE TABLE `amnesia` (
   `code` varchar(33) DEFAULT NULL,
   `timeout` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `beer_drinks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `beer_id` int(10) unsigned NOT NULL,
-  `dateadd` date NOT NULL,
-  `l` float unsigned NOT NULL,
-  `descr` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `beerday` (`beer_id`,`dateadd`),
-  CONSTRAINT `FK_beer_drinks_beer` FOREIGN KEY (`beer_id`) REFERENCES `beers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `beer_factories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `url` varchar(50) NOT NULL,
-  `city_id` int(10) unsigned NOT NULL,
-  `beers` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_beer_factories_city` (`city_id`),
-  CONSTRAINT `FK_beer_factories_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `beer_types` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `beers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `dateadd` int(10) unsigned NOT NULL,
-  `factory_id` int(10) unsigned NOT NULL,
-  `type_id` int(10) unsigned NOT NULL,
-  `is_nf` tinyint(3) unsigned NOT NULL,
-  `is_alive` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `basename` varchar(255) NOT NULL,
-  `url` varchar(50) NOT NULL,
-  `total_uses` int(10) unsigned NOT NULL,
-  `total_litres` float unsigned NOT NULL,
-  `last_used` date DEFAULT NULL,
-  `file_bottle` varchar(50) NOT NULL,
-  `file_label` varchar(50) NOT NULL,
-  `file_backlabel` varchar(50) NOT NULL,
-  `file_collar` varchar(50) NOT NULL,
-  `file_cap` varchar(50) NOT NULL,
-  `comments` int(10) unsigned NOT NULL,
-  `last_comment` int(10) unsigned NOT NULL,
-  `last_comment_uid` bigint(20) unsigned NOT NULL,
-  `rating` int(11) NOT NULL,
-  `description` text NOT NULL,
-  `gravity` float unsigned NOT NULL,
-  `abv` float unsigned NOT NULL,
-  `barcode` varchar(20) NOT NULL,
-  `is_full` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `url` (`url`),
-  KEY `factory` (`factory_id`),
-  KEY `FK_beers_type` (`type_id`),
-  CONSTRAINT `FK_beers_type` FOREIGN KEY (`type_id`) REFERENCES `beer_types` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `FK_beers_factory` FOREIGN KEY (`factory_id`) REFERENCES `beer_factories` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `blog_comments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `owner_id` bigint(20) unsigned DEFAULT '0',
+  `owner_id` int(10) unsigned DEFAULT '0',
   `entry_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `datepost` int(10) unsigned NOT NULL DEFAULT '0',
   `sort` int(11) NOT NULL DEFAULT '0',
@@ -96,7 +37,7 @@ CREATE TABLE `blog_comments_t` (
   PRIMARY KEY (`user_id`,`entry_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `blog_favorites` (
-  `user_id` bigint(10) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `post_id` bigint(10) unsigned NOT NULL DEFAULT '0',
   `dateadd` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`post_id`),
@@ -120,7 +61,7 @@ CREATE TABLE `blog_images` (
 CREATE TABLE `blog_posts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL DEFAULT '',
-  `owner_id` bigint(20) unsigned DEFAULT '0',
+  `owner_id` int(10) unsigned DEFAULT '0',
   `blog_id` int(11) unsigned DEFAULT '0',
   `dateadd` int(10) unsigned NOT NULL DEFAULT '0',
   `lastmodified` int(10) unsigned NOT NULL DEFAULT '0',
@@ -289,58 +230,7 @@ CREATE TABLE `feedbacks` (
   `ip` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `htl1m` (
-  `dateadd` int(10) unsigned NOT NULL,
-  `h` double unsigned NOT NULL,
-  `t` double NOT NULL,
-  `l` int(10) unsigned NOT NULL,
-  `t2` double NOT NULL,
-  `t3` double NOT NULL,
-  `t4` double DEFAULT NULL,
-  `p` double unsigned DEFAULT NULL,
-  `gas` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`dateadd`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `htl1s` (
-  `dateadd` int(10) unsigned NOT NULL,
-  `h` double unsigned NOT NULL,
-  `t` double NOT NULL,
-  `l` int(10) unsigned NOT NULL,
-  `t2` double DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `ingress_map_items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `map_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `dateadd` int(10) unsigned NOT NULL,
-  `ordr` int(11) NOT NULL,
-  `shape` enum('line','circle','marker','comment','user') NOT NULL,
-  `shape_data` text NOT NULL,
-  `geo_lat` double DEFAULT NULL,
-  `geo_lng` double DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `ingress_maps` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `url` varchar(15) NOT NULL,
-  `dateadd` int(10) unsigned NOT NULL,
-  `deleted` tinyint(3) unsigned NOT NULL,
-  `views` int(10) unsigned NOT NULL,
-  `comments` int(10) unsigned NOT NULL,
-  `last_comment` int(10) unsigned NOT NULL,
-  `last_comment_uid` int(10) unsigned NOT NULL,
-  `visible` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `ingress_total_score` (
-  `dateadd` int(10) unsigned NOT NULL,
-  `resistance` bigint(20) NOT NULL,
-  `alien` bigint(20) NOT NULL,
-  `date_time` datetime NOT NULL,
-  PRIMARY KEY (`dateadd`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `menu_links` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -440,23 +330,6 @@ CREATE TABLE `ref_visits` (
   UNIQUE KEY `visitor_ip` (`source_id`,`datevisit`,`ip`,`land_id`),
   KEY `source_id` (`source_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `siprem_checkins_cron` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `venue_id` varchar(50) NOT NULL,
-  `dateadd` int(10) unsigned NOT NULL,
-  `title` varchar(250) NOT NULL,
-  `texts` text NOT NULL,
-  `hours` tinyint(3) unsigned NOT NULL,
-  `autocheckins` int(10) unsigned NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1',
-  `last_checkin` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_venue` (`user_id`,`venue_id`),
-  KEY `active_in_hour` (`hours`,`status`),
-  KEY `byuser` (`user_id`),
-  CONSTRAINT `FK_siprem_checkins_cron_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `site_settings` (
   `id` varchar(50) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -515,7 +388,7 @@ CREATE TABLE `tags` (
   KEY `ordr` (`ordr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `acc_type_id` int(10) unsigned DEFAULT NULL,
   `nick` varchar(50) NOT NULL DEFAULT '',
   `full_name` varchar(150) NOT NULL DEFAULT '',
@@ -553,7 +426,7 @@ CREATE TABLE `users_email_changes` (
   KEY `user_id_changed` (`user_id`,`changed`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `users_external` (
-  `user_id` bigint(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `network_id` int(10) unsigned NOT NULL,
   `client_id` varchar(255) NOT NULL,
   `client_secret` varchar(255) NOT NULL,
@@ -569,7 +442,7 @@ CREATE TABLE `users_external` (
   CONSTRAINT `FK_users_external_uid` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ключи к внешним сетям';
 CREATE TABLE `users_info` (
-  `id` bigint(10) unsigned NOT NULL DEFAULT '0',
+  `id` int(10) unsigned NOT NULL DEFAULT '0',
   `birthday` date NOT NULL DEFAULT '0000-00-00',
   `about` text NOT NULL,
   `email` varchar(50) NOT NULL DEFAULT '',
@@ -580,12 +453,27 @@ CREATE TABLE `users_info` (
   CONSTRAINT `FK_users_info` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `users_stats` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` int(20) unsigned NOT NULL,
   `blog_posts` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_users_stats` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE `urls` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `url_hash` varchar(32) NOT NULL DEFAULT '',
+  `url_type` enum('none','file','folder') DEFAULT 'none',
+  `handler` varchar(50) NOT NULL DEFAULT '',
+  `handled_id` int(10) unsigned DEFAULT NULL,
+  `valid_from` int(10) unsigned NOT NULL,
+  `valid_to` int(10) unsigned NOT NULL,
+  `date_add` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url_hash` (`url_hash`),
+  KEY `handler` (`handler`,`handled_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `users_devices` (
@@ -607,6 +495,6 @@ CREATE TABLE `users_devices` (
   KEY `valid_class` (`is_device_token_valid`,`class_name`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `users_devices_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS=1;
