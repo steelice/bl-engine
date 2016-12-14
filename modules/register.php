@@ -34,24 +34,24 @@ class module_register extends rMyModule{
 			return false;
 		}
 
-		$user = new \rMyUser($this->app->db);
+		$user = new \rMyUser();
 		if($user->getByLogin($d['login'])){
 			$this->app->addMessage($this->app->lang->error_login_exists, APPMSG_ERROR);
 			return false;
 		}
 
-		$salt = rMyUser::getRandSalt();
-		$access_token = rMyUser::generateAccessToken();
-		$this->app->db->query('INSERT INTO users SET ?a', array(
-			LOGIN_FIELD => $d['login'],
-			'password' => $this->app->user->hashPassword($d['pass'], $salt),
+		
+		if(!$user->create([
 			'nick' => $d['login'],
 			'full_name' => $d['login'],
-			'ip' => rMyUser::getIntIP(),
-			'salt' => $salt,
-			'access_token' => $access_token,
-			'datereg' => time()
-		));
+			PASS_FIELD => $d['pass'],
+			LOGIN_FIELD => $d['login']
+		])){
+			$this->app->addMessage("Can't create user!", APPMSG_ERROR);
+			return false;
+		}
+
+		
 
 		$this->app->user->login($d['login'], $d['pass'], time() + (60*60*24*365));
 

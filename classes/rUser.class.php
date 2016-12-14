@@ -95,6 +95,9 @@ class rUser{
 	protected $tablePrefix = '';
 
 	protected $_selectString = 'SELECT u.* FROM users AS u ';
+
+	protected $tableModel = 'model_users';
+	protected $table = NULL;
 	
 	protected $userpics = array(
 		'original' => array('prefix' => '', 'w' => 500, 'h' => 500, 'assign_as_next' => 1),
@@ -125,9 +128,10 @@ class rUser{
 		$this->deviceID = md5('empty');
 	}
 
-	public function getTableName($table)
+	public function getTableName($table, $escape = false)
 	{
-		return '`'.$this->tablePrefix.$table.'`';
+		if($escape) return '`'.$this->tablePrefix.$table.'`';
+		return $this->tablePrefix.$table;
 	}
 
 	public function getCurToken()
@@ -480,7 +484,8 @@ class rUser{
 
 		if(!$this->_ID) return false;
 		
-		
+		$model = $this->tableModel;
+		$this->table = $model::get($this->_ID);
 		
 		if(!empty($this->data['userpic'])){
 			foreach($this->userpics as $key => $u){
@@ -615,6 +620,24 @@ class rUser{
 
 
 		return $info;		
+	}
+	
+	/**
+	* getInfo()
+	* @return mixed
+	*/
+	public function getStats(){
+		if(!$this->_ID) return array();
+		$stat = $this->db->selectRow('SELECT * FROM '.$this->getTableName('users_stats').' WHERE id = ?d', $this->_ID);
+		
+		if(!$stat){
+			$this->db->query('INSERT INTO '.$this->getTableName('users_stats').' SET id = ?d', $this->_ID);
+			$stat = $this->db->selectRow('SELECT * FROM '.$this->getTableName('users_stats').' WHERE id = ?d', $this->_ID);
+		}
+
+
+
+		return $stat;		
 	}
 	
 	/**
@@ -899,6 +922,36 @@ class rUser{
 		$setts = $this->getEmailSettings();
 		$setts[$key] = $data;
 		$this->setEmailSettings($setts);
+	}
+
+
+	public function create($data)
+	{
+		$salt = $this->getRandSalt();
+		// $access_token = $this->generateAccessToken();
+
+		$data[PASS_FIELD] = $this->hashPassword($data[PASS_FIELD], $salt);
+		$data['salt'] = $salt;
+		$data['ip'] = $this->getIntIP();
+		// $data['access_token'] = $access_token;
+		$data['datereg'] = time();
+		$data['ip'] = $this->getIntIP();
+
+		$id = $this->db->query('INSERT INTO ?# SET ?a', $this->getTableName('users'), $data);
+		if(!$id) throw new Exception("Can't create user!");
+
+		if(!$this->getByID($id)) throw new Exception("Error Processing Request");
+		
+		
+		$this->db->query('INSERT INTO ?# SET ?a', $this->getTableName('users_stats'), [
+			'id' => $this->getID(),
+		]);
+
+		$this->db->query('INSERT INTO ?# SET ?a', $this->getTableName('users_info'), [
+			'id' => $this->getID(),
+		]);
+
+		return true;
 	}
  
 }
