@@ -22,6 +22,11 @@ class modelRebuilder
 
 	protected $app;
 
+	protected $sql2phpTypes = [
+	    'varchar' => 'string', 'text' => 'string', 'longtext' => 'string', 'tinyint' => 'int', 'timestamp' => 'string',
+        'int' => 'int'
+    ];
+
 	function __construct($path)
 	{
 		if(!is_dir($path)){
@@ -34,6 +39,11 @@ class modelRebuilder
 
 		$this->app = rMyCLIApp::getInstance();
 		
+	}
+
+    public function sql2phpType($sqlType)
+    {
+        return isset($this->sql2phpTypes[$sqlType]) ? $this->sql2phpTypes[$sqlType] : 'string';
 	}
 
 	public function rebuildWithout($wo, $woSystem = true)
@@ -92,11 +102,13 @@ class modelRebuilder
 
 	public function getTableInfo($table)
 	{
-		$fields = @$this->app->db->select('EXPLAIN ?#', $table);
+		$fields = @$this->app->db->select('SHOW FULL COLUMNS FROM ?#', $table);
 		if(!$fields){
 			$this->log('Table "'.$table.'" not exists!');
 			return false;
 		}
+
+//		$this->log($fields);
 
 		$pKey = '';
 		$tableFields = array();
@@ -124,6 +136,7 @@ class modelRebuilder
 			'is_index' => $field['Key'] != '',
 			'is_unsigned' => strpos($field['Type'], 'unsigned') !== false,
 			'default' => $field['Default'],
+            'description' => $field['Comment'],
 		);
 
 		return $info;
@@ -145,6 +158,11 @@ class modelRebuilder
 		$code .= "\tstatic protected \$tableName = '{$tableInfo['table_name']}';\n";
 		$code .= "\n";
 		$code .= "\tstatic protected \$fields = ".var_export($tableInfo['fields'], 1).";\n";
+		$code .= "\t/**\n";
+		foreach ($tableInfo['fields'] as $field){
+		    $code .= "\t* @var ".$this->sql2phpType($field['type'])." {$field['name']} {$field['description']}\n";
+        }
+        $code .= "\t*/";
 		$code .= "\n}";
 
 		return $code;
