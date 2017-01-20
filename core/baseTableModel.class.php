@@ -55,7 +55,7 @@ abstract class baseTableModel
 
 	* @var $id int|string|array - если int или string то значение единичного ключа. Если массив - набор field => value
 	* @var $key string|null если задано, то имя ключа, по которому высылается
-	* @return self|null либо созданный объект, либо false, если такой строки не найдено
+	* @return static либо созданный объект, либо false, если такой строки не найдено
 	**/
 	static public function get($id, $key = null)
 	{
@@ -97,7 +97,7 @@ abstract class baseTableModel
 	* @var $data array массив с данными. автоматически фильтруется
 	* @var $doGetAfterInsert bool надо ли принудительно сделать SELECT из таблицы после вставки, либо заполнить массив «предполагаемыми» данными
 	* @var $updateIfExists bool делать ли ON DUPLICATE KEY UPDATE
-	* @return baseTableModel|false либо созданный объект, либо false, если добавить строку не удалось
+	* @return static|false либо созданный объект, либо false, если добавить строку не удалось
 	*/
 	static public function create($data, $doGetAfterInsert = false, $updateIfExists = false)
 	{

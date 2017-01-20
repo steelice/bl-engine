@@ -4,7 +4,11 @@
 
 abstract class rModule{
 
-	protected $app = null;
+    /**
+     * @var rApplication
+     */
+	protected $app;
+
 	protected $user = null;
 
 	public function __construct(rApplication $app)
