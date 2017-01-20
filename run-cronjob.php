@@ -48,7 +48,7 @@ try{
 	$class = new $className(rMyCLIApp::getInstance());
 	$class->$method();
 }catch(Exception $e){
-	exit("Error: ".$e->getMessage()."\n\n");
+	exit("Error: ".$e->getMessage()." ".$e->getFile().":".$e->getLine()."\n\n");
 }
 
 echo "\n";

@@ -160,7 +160,7 @@ class modelRebuilder
 		$code .= "\tstatic protected \$fields = ".var_export($tableInfo['fields'], 1).";\n";
 		$code .= "\t/**\n";
 		foreach ($tableInfo['fields'] as $field){
-		    $code .= "\t* @var ".$this->sql2phpType($field['type'])." {$field['name']} {$field['description']}\n";
+		    $code .= "\t* @property ".$this->sql2phpType($field['type'])." {$field['name']} {$field['description']}\n";
         }
         $code .= "\t*/";
 		$code .= "\n}";

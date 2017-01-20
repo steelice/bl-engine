@@ -55,7 +55,7 @@ abstract class baseTableModel
 
 	* @var $id int|string|array - если int или string то значение единичного ключа. Если массив - набор field => value
 	* @var $key string|null если задано, то имя ключа, по которому высылается
-	* @return baseTableModel|null либо созданный объект, либо false, если такой строки не найдено
+	* @return self|null либо созданный объект, либо false, если такой строки не найдено
 	**/
 	static public function get($id, $key = null)
 	{
