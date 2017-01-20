@@ -32,9 +32,9 @@ class api_users_amnesia extends rMyAPIModule
 		}
 
 		require_once 'classes/rEmailer.class.php';
-		rEmailer::sendEmail($user->email, 'Востановление пароля', 'Привет. Перейди по ссылке http://alfa-lead.ru/login/amnesia/'.$code);
+//		rEmailer::sendEmail($user->email, 'Востановление пароля', 'Привет. Перейди по ссылке http://alfa-lead.ru/login/amnesia/'.$code);
 
-		return $code;
+		return 'SENT';
 		
 	}
 

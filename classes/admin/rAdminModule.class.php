@@ -116,6 +116,7 @@ abstract class rAdminModule extends rModule{
 			$this->addModuleCSS($this->moduleInfo['style']);
 
 		$this->assign('_MODULE', $this->curModule);
+
 		$this->assign('_MODULE_AJAX', ADMIN_URL."ajax/$section/$module/");
 
 

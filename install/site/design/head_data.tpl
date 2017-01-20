@@ -39,18 +39,17 @@
 {/if}
 
 <script type="text/javascript">
-	var rootPath = '{$ROOT}';
-	var IMG = '{$IMG}';
-	var jsPath = '{$ROOT}js/';
-	var AJAXPath = '{$ROOT}ajax/';
-	var JSONPath = '{$ROOT}json/';
-	var LOGIN_PREG = {$smarty.const.LOGIN_PREG};
-	var ROOT_LANG = '{$ROOT_LANG}';
-	var curLang = '{$_APP->getCurLang()}';
-
-	function NoElasticScroll(e){
-  		//e.preventDefault(); 
-	}
+    var _ENV = {
+        rootPath: '{$ROOT}',
+        imgPath: '{$IMG}',
+        AJAXPath: '{$ROOT}ajax/',
+        JSONPath: '{$ROOT}json/',
+        APIPath: '{$ROOT}api/v1/',
+        curLang: {
+            rootPath: '{$ROOT_LANG}',
+            code: '{$_APP->getCurLang()}'
+        }
+    };
 
 
 </script>

@@ -14,6 +14,9 @@ require_once 'core/DB.class.php';
 
 abstract class rApplication extends rSimpleApplication{
 
+    /**
+     * @var DbSimple_Database
+     */
 	public $db;
 
 	

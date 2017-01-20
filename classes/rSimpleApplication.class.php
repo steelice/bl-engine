@@ -16,8 +16,14 @@ define('APPMSG_USER_ERROR', -100);
 abstract class rSimpleApplication{
 
 	public $tpl;
+	/*
+	 * @var rURLs $url
+	 */
 	public $url;
 	public $lang;
+    /**
+     * @var rUser
+     */
 	public $user;
 
 	protected static $instance;
